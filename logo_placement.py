@@ -26,6 +26,6 @@ def place_logo_on_slide(slide, table_shape, table, row_idx, col_idx, logo_file):
     img_width = int(width * 0.85)
     img_height = int(height * 0.55)
     img_left = left + int(width * 0.05)
-    img_top = top + int(height * 0.15)  # slightly lower for balanced look
+    img_top = top + int(height * 0.17)  # slightly lower for balanced look
 
     slide.shapes.add_picture(logo_file, img_left, img_top, img_width, img_height)
