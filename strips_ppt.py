@@ -2,6 +2,8 @@ from pptx import Presentation
 import pandas as pd
 from pptx.dml.color import RGBColor
 from copy_helpers import copy_table_from_template_slide
+from logo_resources import get_logo_file_path
+from logo_placement import place_logo_on_slide
 
 def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.DataFrame, start_number: int):
     
@@ -28,9 +30,11 @@ def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
 
     # Find the table shape on the slide
     table = None
+    table_shape = None
     for shape in slide.shapes:
         if shape.has_table:
             table = shape.table
+            table_shape = shape
             break
     if table is None:
         raise ValueError(f'No table found on slide layout {layout_index}!')
@@ -149,3 +153,8 @@ def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
             cell.text = f"Acquisitions: {acquisition_count} \n \nCompanies: {acquisition_names}"
             cell.text_frame._element.remove(cell.text_frame.paragraphs[-1]._element)
             
+
+        # Add logos to the second column
+        logo_file = get_logo_file_path(row)
+        if logo_file:
+            place_logo_on_slide(slide, table_shape, table, row_idx, 1, logo_file)

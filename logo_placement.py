@@ -1,29 +1,31 @@
 from pptx import slide, table
 
-def place_logo_on_slide(slide : slide.Slide, table : table.Table, row_idx, col_idx, logo_file):
-
+def place_logo_on_slide(slide, table_shape, table, row_idx, col_idx, logo_file):
     """
-    Places the logo image on the slide, anchored to the specified cell position.
+    Places the logo image on the slide, anchored visually aligned to the table cell
+    at (row_idx, col_idx) with a slight downward offset for balanced look.
 
     Parameters
     ----------
     slide : pptx.slide.Slide
+    table_shape : pptx.shape.Shape
+        The shape that contains the table, used to get .left and .top
     table : pptx.table.Table
+        The actual table object
     row_idx : int
     col_idx : int
     logo_file : str
-        Full path to the PNG file to insert.
+        Path to the PNG file to insert.
     """
-    cell = table.cell(row_idx, col_idx)
-    left = cell.left
-    top = cell.top
-    width = cell.width
-    height = cell.height
+    left = table_shape.left + sum([table.columns[i].width for i in range(col_idx)])
+    top = table_shape.top + sum([table.rows[j].height for j in range(row_idx)])
+    width = table.columns[col_idx].width
+    height = table.rows[row_idx].height
 
-    # Apply slight insert
+    # Slight inset and slight downward offset to look good even with multi-line text
     img_width = int(width * 0.9)
-    img_height = int(height * 0.9)
+    img_height = int(height * 0.7)
     img_left = left + int(width * 0.05)
-    img_top = top + int(height * 0.05)
+    img_top = top + int(height * 0.2)  # slightly lower for balanced look
 
     slide.shapes.add_picture(logo_file, img_left, img_top, img_width, img_height)
