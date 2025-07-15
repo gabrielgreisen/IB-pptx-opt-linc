@@ -35,5 +35,30 @@ def ensure_logo_available(logo_name, domain, logo_base_dir="logos"):
             if os.path.exists(logo_file):
                 print(f"✅ Successfully fetched and saved logo for {domain}")
                 return logo_file
-        print(f"✅ Successfully fetched and saved logo for {domain}")
+        print(f"❌ Could not obtain logo for {domain}")
         return None
+    
+
+def get_logo_file_path(row, logo_base_dir="logos"):
+    """
+    Given a DataFrame row with expected columns for logo name and domain,
+    returns the full path to the logo file, ensuring it exists (or fetched).
+
+    Parameters
+    ----------
+    row : pd.Series
+        A row from your DataFrame with logo and domain info.
+
+    logo_base_dir : str
+        The directory where logo PNG files are stored.
+
+    Returns
+    -------
+    str or None
+        Full path to the logo PNG file, or None if unavailable.
+    """
+
+    logo_name = str(row.iloc[10]) # your 10th column for cleaned logo name
+    domain = str(row.iloc[9]) # your 9th column for website domain
+
+    return ensure_logo_available(logo_name, domain, logo_base_dir=logo_base_dir)
