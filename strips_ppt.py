@@ -43,12 +43,13 @@ def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
     for i, (_, row) in enumerate(buyers_chunk_df.iterrows()):
         row_idx = i + 1
         # Assumes that columns follow the correct format/order of the columns according to mask; fixed column positions
-        exchange = str(row.iloc[2])
-        ticker = str(row.iloc[3])
-        country = str(row.iloc[4])
-        br_presence = str(row.iloc[6])
-        acquisition_count = str(row.iloc[7])
-        acquisition_names = str(row.iloc[8])
+        exchange = str(row.iloc[3])
+        ticker = str(row.iloc[4])
+        country = str(row.iloc[5])
+        description = str(row.iloc[6])
+        br_presence = str(row.iloc[7])
+        acquisition_count = str(row.iloc[8])
+        acquisition_names = str(row.iloc[9])
 
         # Build first column (numbering)
         number = start_number + i
@@ -108,9 +109,9 @@ def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
         # Build third column (description)
         cell = table.cell(row_idx, 2)
         if cell.text_frame.paragraphs and cell.text_frame.paragraphs[0].runs:
-            cell.text_frame.paragraphs[0].runs[0].text = row.iloc[5]
+            cell.text_frame.paragraphs[0].runs[0].text = description
         else:
-            cell.text = row.iloc[5]
+            cell.text = description
         
         
         # Build fourth column (BR Presence)
