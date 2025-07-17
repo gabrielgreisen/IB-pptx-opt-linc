@@ -17,7 +17,7 @@ def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
         The loaded Presentation object.
 
     layout_index : int
-        Index of the slide layout (e.g. 1).
+        Index of the slide master layout (e.g. 1).
 
     buyers_chunk_df : pd.DataFrame
         A slice of the DataFrame, typically up to 6 rows.
@@ -158,7 +158,8 @@ def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
         # Add logos to the second column
         logo_file = get_logo_file_path(row)
         if logo_file:
-            place_logo_on_slide(slide, table_shape, table, row_idx, 1, logo_file)
+            place_logo_on_slide(slide, table_shape, table, row_idx, 1, logo_file,
+                                width_spacing=0.85,height_spacing=0.55,left_spacing=0.05,top_spacing=0.17)
 
 
 def strips_layout_two(prs: Presentation, layout_index: int, buyers_chunk_df: pd.DataFrame, start_number: int):
@@ -173,7 +174,7 @@ def strips_layout_two(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
         The loaded Presentation object.
 
     layout_index : int
-        Index of the slide layout (e.g. 1).
+        Index of the slide master layout (e.g. 1).
 
     buyers_chunk_df : pd.DataFrame
         A slice of the DataFrame, typically up to 6 rows.
@@ -182,7 +183,7 @@ def strips_layout_two(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
     slide_layout = prs.slide_layouts[layout_index]
     slide = prs.slides.add_slide(slide_layout)
 
-    copy_table_from_template_slide(prs, source_slide_idx=1, target_slide=slide)
+    copy_table_from_template_slide(prs, source_slide_idx=2, target_slide=slide)
 
     # Find the table shape on the slide
     table = None
@@ -206,10 +207,16 @@ def strips_layout_two(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
         br_presence = str(row.iloc[7])
         acquisition_count = str(row.iloc[8])
         acquisition_names = str(row.iloc[9])
-        revenue = str(row.iloc[12])
-        ebitda = str(row.iloc[13])
-        market_cap = str(row.iloc[14])
-        employees = str(row.iloc[15])
+        def format_number(val):
+            try:
+                return f"{float(val):,.2f}" # comma as thousand separator + 2 decimals
+            except:
+                return str(val)
+
+        revenue = format_number(row.iloc[12])
+        ebitda = format_number(row.iloc[13])
+        market_cap = format_number(row.iloc[14])
+        employees = format_number(row.iloc[15])
 
         # Build first column (numbering)
         number = start_number + i
@@ -270,14 +277,14 @@ def strips_layout_two(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
         found_index = None
         for idx, para in enumerate(cell.text_frame.paragraphs):
             if para.runs:
-                para.runs[0].text = f"(Revenue:{revenue})\nEBITDA:{ebitda}\nMarket Cap:{market_cap}\nTotal Debt:XXX\nFTE:{employees}" # Assumes same formating for the whole text
+                para.runs[0].text = f"Revenue: {revenue}\nEBITDA: {ebitda}\nMarket Cap: {market_cap}\nTotal Debt: XXX\nFTE: {employees}" # Assumes same formating for the whole text
                 found_index = idx
                 break
         else:
             # if none of the paragraphs had a run text is added with default formating
             para = cell.text_frame.add_paragraph()
             run = para.add_run()
-            run.text = f"(Revenue:{revenue})\nEBITDA:{ebitda}\nMarket Cap:{market_cap}\nTotal Debt:XXX\nFTE:{employees}"
+            run.text = f"Revenue: {revenue}\nEBITDA: {ebitda}\nMarket Cap: {market_cap}\nTotal Debt:XXX\nFTE: {employees}"
             found_index = len(cell.text_frame.paragraphs) - 1
 
         for idx, extra_para in reversed(list(enumerate(cell.text_frame.paragraphs))):
@@ -340,6 +347,7 @@ def strips_layout_two(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
         # Add logos to the second column
         logo_file = get_logo_file_path(row)
         if logo_file:
-            place_logo_on_slide(slide, table_shape, table, row_idx, 1, logo_file)
+            place_logo_on_slide(slide, table_shape, table, row_idx, 1, logo_file,
+                                width_spacing=0.95, height_spacing=0.50, left_spacing=0.03, top_spacing=0.18)
 
 

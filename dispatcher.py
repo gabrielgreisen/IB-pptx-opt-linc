@@ -1,15 +1,15 @@
 import pandas as pd
 from pptx import Presentation
-from strips_ppt import strips_layout_one
+from strips_ppt import strips_layout_one, strips_layout_two
 
 df = pd.read_excel(
-    "database_strips_v4stale.xlsx",
+    "database_strips_v5CIQstale.xlsx",
     sheet_name="Python Strip Mask",
     header=1, # because the headers for the table are on row 2
-    usecols="B:L" # adjust based on column range of the table/info
+    usecols="B:Q" # adjust based on column range of the table/info
 )
 
-prs = Presentation("template.pptx")
+prs = Presentation("templates.pptx")
 
 for i, layout in enumerate(prs.slide_layouts):
     print(f"Layout {i}: {layout.name}")
@@ -62,6 +62,18 @@ def run_strips_template(template_number: int, prs: Presentation, df: pd.DataFram
 
             strips_layout_one(prs, layout_index=1, buyers_chunk_df=chunk_df, start_number=start_number)
         print(f"✅ Finished presentation with {runs_total} slides.")
+    elif template_number == 2:
+        rows_per_slide = 6
+        runs_total = (len(df) + rows_per_slide - 1)//rows_per_slide # Add an extra to force floor division to work like ceiling division, so last partial slide is included
 
-run_strips_template(1, prs=prs, df=df)
+        for run_count in range(runs_total):
+            print(f"📊 Creating slide {run_count+1} of {runs_total}...")
+            start_idx = run_count * rows_per_slide
+            chunk_df = df.iloc[start_idx : start_idx + rows_per_slide]
+            start_number = run_count * rows_per_slide + 1
+
+            strips_layout_two(prs, layout_index=1, buyers_chunk_df=chunk_df, start_number=start_number)
+        print(f"✅ Finished presentation with {runs_total} slides.")
+
+run_strips_template(2, prs=prs, df=df)
 prs.save("buyers_presentation.pptx")
