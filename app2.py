@@ -37,7 +37,15 @@ template_file = st.selectbox(
     index=0  # defaults to first
 )
 output_file = st.text_input("Output PPT file name", value="buyers_presentation.pptx")
-template_number = st.number_input("Template number", min_value=1, max_value=5, value=1, step=1)
+
+# Step 1 - Layout options
+template_options = {
+    "Classic Buyer Strips": 1,
+    "Strips with key Financials" : 2
+}
+selected_template = st.selectbox("Choose Layout Style", list(template_options.keys()))
+template_number = template_options[selected_template]
+
 
 st.markdown("<hr style='border:1px solid #eee'>", unsafe_allow_html=True)
 
