@@ -1,6 +1,7 @@
 import pandas as pd
 from pptx import Presentation
-from strips_ppt import strips_layout_one, strips_layout_two
+from templates.template_1 import strips_layout_one
+from templates.template_2 import strips_layout_two
 
 df = pd.read_excel(
     "database_strips_v5CIQstale.xlsx",
