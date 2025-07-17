@@ -199,12 +199,17 @@ def strips_layout_two(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
     for i, (_, row) in enumerate(buyers_chunk_df.iterrows()):
         row_idx = i + 1
         # Assumes that columns follow the correct format/order of the columns according to mask; fixed column positions
-        exchange = str(row.iloc[2])
-        ticker = str(row.iloc[3])
-        country = str(row.iloc[4])
-        br_presence = str(row.iloc[6])
-        acquisition_count = str(row.iloc[7])
-        acquisition_names = str(row.iloc[8])
+        exchange = str(row.iloc[3])
+        ticker = str(row.iloc[4])
+        country = str(row.iloc[5])
+        description = str(row.iloc[6])
+        br_presence = str(row.iloc[7])
+        acquisition_count = str(row.iloc[8])
+        acquisition_names = str(row.iloc[9])
+        revenue = str(row.iloc[12])
+        ebitda = str(row.iloc[13])
+        market_cap = str(row.iloc[14])
+        employees = str(row.iloc[15])
 
         # Build first column (numbering)
         number = start_number + i
@@ -260,23 +265,45 @@ def strips_layout_two(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
                     break
             
             
-        
-        # Build third column (description)
+        # Build third column (financials)
         cell = table.cell(row_idx, 2)
-        if cell.text_frame.paragraphs and cell.text_frame.paragraphs[0].runs:
-            cell.text_frame.paragraphs[0].runs[0].text = row.iloc[5]
+        found_index = None
+        for idx, para in enumerate(cell.text_frame.paragraphs):
+            if para.runs:
+                para.runs[0].text = f"(Revenue:{revenue})\nEBITDA:{ebitda}\nMarket Cap:{market_cap}\nTotal Debt:XXX\nFTE:{employees}" # Assumes same formating for the whole text
+                found_index = idx
+                break
         else:
-            cell.text = row.iloc[5]
+            # if none of the paragraphs had a run text is added with default formating
+            para = cell.text_frame.add_paragraph()
+            run = para.add_run()
+            run.text = f"(Revenue:{revenue})\nEBITDA:{ebitda}\nMarket Cap:{market_cap}\nTotal Debt:XXX\nFTE:{employees}"
+            found_index = len(cell.text_frame.paragraphs) - 1
+
+        for idx, extra_para in reversed(list(enumerate(cell.text_frame.paragraphs))):
+            if idx > found_index:
+                cell.text_frame._element.remove(extra_para._element)
+            else:
+                break
+
+
+
+
+        # Build fourth column (description)
+        cell = table.cell(row_idx, 3)
+        if cell.text_frame.paragraphs and cell.text_frame.paragraphs[0].runs:
+            cell.text_frame.paragraphs[0].runs[0].text = description
+        else:
+            cell.text = description
         
         
-        # Build fourth column (BR Presence)
-            
+        # Build fifth column (BR Presence)
         check_mark = "\u2713" # ✓
         cross_mark = "\u2718" # ✘
 
         if br_presence == "Yes":
-            # Figure out how to put the check and the cross formating (its some sort of font)
-            cell = table.cell(row_idx, 3)
+            # Figure out how to put the check and the cross formating (its some sort of font)(solved for now)
+            cell = table.cell(row_idx, 4)
             if cell.text_frame.paragraphs and cell.text_frame.paragraphs[0].runs:
                 run = cell.text_frame.paragraphs[0].runs[0]
                 run.text = check_mark
@@ -288,7 +315,7 @@ def strips_layout_two(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
                 run.text = check_mark
                 run.font.color.rgb = RGBColor(0,168,126)
         elif br_presence == "No":
-            cell = table.cell(row_idx, 3)
+            cell = table.cell(row_idx, 4)
             if cell.text_frame.paragraphs and cell.text_frame.paragraphs[0].runs:
                 run = cell.text_frame.paragraphs[0].runs[0]
                 run.text = cross_mark
@@ -300,8 +327,8 @@ def strips_layout_two(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
                 run.text = cross_mark
                 run.font.color.rgb = RGBColor(192,0,0)
 
-        # Build fifth column (M&A History)
-        cell = table.cell(row_idx, 4)
+        # Build sixth column (M&A History)
+        cell = table.cell(row_idx, 5)
         if cell.text_frame.paragraphs and cell.text_frame.paragraphs[0].runs:
             cell.text_frame.paragraphs[0].runs[0].text = f"Acquisitions: {acquisition_count} \n \nCompanies: {acquisition_names}"
             cell.text_frame._element.remove(cell.text_frame.paragraphs[-1]._element)
