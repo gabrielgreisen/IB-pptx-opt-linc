@@ -29,8 +29,13 @@ st.markdown("<h4 style='font-family:Arial; color:#003366;'>📂 Excel & PowerPoi
 
 # Upload file
 uploaded_file = st.file_uploader("Upload your Excel file", type=["xlsx"])
+st.caption("Please ensure your Excel file maintains the 'Python Strip Mask' structure to guarantee accurate slide creation.")
 sheet_name = st.text_input("Sheet name", value="Python Strip Mask")
-template_file = st.text_input("PPT template path", value="template.pptx")
+template_file = st.selectbox(
+    "Select PPT template file",
+    options=["template.pptx", "template_wide.pptx"],
+    index=0  # defaults to first
+)
 output_file = st.text_input("Output PPT file name", value="buyers_presentation.pptx")
 template_number = st.number_input("Template number", min_value=1, max_value=5, value=1, step=1)
 
@@ -40,8 +45,9 @@ if uploaded_file is not None:
     # Just display filename for user confidence
     st.write(f"✓ Uploaded: {uploaded_file.name}")
     
+    
     # When button is pressed
-    if st.button("Run Presentation"):
+    if st.button("Generate Presentation"):
         try:
             df = pd.read_excel(
                 uploaded_file,
@@ -55,6 +61,13 @@ if uploaded_file is not None:
             run_strips_template(template_number, prs=prs, df=df)
             prs.save(output_file)
             st.success(f"✓ Presentation saved as '{output_file}'.")
+            with open(output_file, "rb") as f:
+                st.download_button(
+                    label="Download Presentation",
+                    data=f,
+                    file_name=output_file,
+                    mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                )
         except Exception as e:
             st.error(f"✘ Something went wrong: {e}")
 else:
