@@ -160,7 +160,7 @@ def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
             place_logo_on_slide(slide, table_shape, table, row_idx, 1, logo_file)
 
 
-def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.DataFrame, start_number: int):
+def strips_layout_two(prs: Presentation, layout_index: int, buyers_chunk_df: pd.DataFrame, start_number: int):
     
     """
     Adds a slide to the presentation using the specified layout index,
