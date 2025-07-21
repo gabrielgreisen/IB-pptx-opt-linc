@@ -1,5 +1,8 @@
 import os
 from helpers.brandfetcher import get_brandfetch_logo, download_logo_file
+from path_utils import get_base_path
+
+BASE_PATH = get_base_path()
 
 def ensure_logo_available(logo_name, domain, logo_base_dir="logos"):
     """
@@ -24,14 +27,15 @@ def ensure_logo_available(logo_name, domain, logo_base_dir="logos"):
         The full path to the logo file if it exists or was fetched successfully, else None.
     """
 
-    logo_file = os.path.join(logo_base_dir, f"{logo_name}.png")
+    logo_dir = os.path.join(BASE_PATH, logo_base_dir)
+    logo_file = os.path.join(logo_dir, f"{logo_name}.png")
     if os.path.exists(logo_file):
         return logo_file
     else:
         print(f"🔍 Attempting to fetch logo for {domain} to save as {logo_name}")
         logo_url = get_brandfetch_logo(domain)
         if logo_url:
-            download_logo_file(logo_url, logo_name, save_dir=logo_base_dir)
+            download_logo_file(logo_url, logo_name, save_dir=logo_dir)
             if os.path.exists(logo_file):
                 print(f"✅ Successfully fetched and saved logo for {domain}")
                 return logo_file
