@@ -1,16 +1,20 @@
+import os
 import pandas as pd
 from pptx import Presentation
 from templates.template_1 import strips_layout_one
 from templates.template_2 import strips_layout_two
+from path_helpers import get_base_path
+
+BASE_PATH = get_base_path()
 
 df = pd.read_excel(
-    "database_strips_v5CIQstale.xlsx",
+    os.path.join(BASE_PATH, "database_strips_v5CIQstale.xlsx"),
     sheet_name="Python Strip Mask",
     header=1, # because the headers for the table are on row 2
     usecols="B:Q" # adjust based on column range of the table/info
 )
 
-prs = Presentation("templates.pptx")
+prs = Presentation(os.path.join(BASE_PATH, "templates.pptx"))
 
 for i, layout in enumerate(prs.slide_layouts):
     print(f"Layout {i}: {layout.name}")
@@ -77,4 +81,4 @@ def run_strips_template(template_number: int, prs: Presentation, df: pd.DataFram
         print(f"✅ Finished presentation with {runs_total} slides.")
 
 run_strips_template(2, prs=prs, df=df)
-prs.save("buyers_presentation.pptx")
+prs.save(os.path.join(BASE_PATH, "buyers_presentation.pptx"))

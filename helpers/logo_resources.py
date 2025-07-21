@@ -1,6 +1,6 @@
 import os
 from helpers.brandfetcher import get_brandfetch_logo, download_logo_file
-from path_utils import get_base_path
+from path_helpers import get_base_path
 
 BASE_PATH = get_base_path()
 
