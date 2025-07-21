@@ -3,11 +3,13 @@ import pandas as pd
 from pptx import Presentation
 from dispatcher import run_strips_template
 import io
+import os
+from path_helpers import get_base_path
 
 st.set_page_config(layout="wide", page_title="Buyers Presentation Tool")
 
 # === Header with Lincoln logo
-st.image("logos/lincolninternational.png", width=200) 
+st.image(os.path.join(get_base_path(), "logos", "lincolninternational.png"), width=200)
 st.markdown("<h2 style='font-family:Arial; color:#003366;'>Buyers Presentation Tool</h2>", unsafe_allow_html=True)
 
 st.markdown("<hr style='border:1px solid #eee'>", unsafe_allow_html=True)
@@ -65,7 +67,7 @@ if uploaded_file is not None:
             ).dropna(subset=['pb_id'])
             st.success(f"✓ Loaded {len(df)} buyers from uploaded file.")
 
-            prs = Presentation(template_file)
+            prs = Presentation(os.path.join(get_base_path(), template_file))
             run_strips_template(template_number, prs=prs, df=df)
             prs.save(output_file)
             st.success(f"✓ Presentation saved as '{output_file}'.")
