@@ -2,8 +2,8 @@ from pptx import Presentation
 import pandas as pd
 from pptx.dml.color import RGBColor
 from copy_helpers import copy_table_from_template_slide
-from logo_resources import get_logo_file_path
-from logo_placement import place_logo_on_slide
+from helpers.logo_resources import get_logo_file_path
+from helpers.logo_placement import place_logo_on_slide
 
 def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.DataFrame, start_number: int):
     
