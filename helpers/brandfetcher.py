@@ -104,7 +104,7 @@ def download_logo_file(logo_url, filename, save_dir= "logos"):
             f.write(r.content)
             print(f"✅ Saved logo as {path}")
     else:
-        print(f"❌ Failed to dowload logo from {logo_url}")
+        print(f"❌ Failed to download logo from {logo_url}")
 
 
 
@@ -125,7 +125,7 @@ if __name__ == "__main__":
         short_name = shorten_name(domain)
         local_path = f"logos/{short_name}.png"
         if os.path.exists(local_path):
-            print(f"✅ Logo already exixts for {domain}, skipping.")
+            print(f"✅ Logo already exists for {domain}, skipping.")
             continue
 
         logo_url = get_brandfetch_logo(domain)
