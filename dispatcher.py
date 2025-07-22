@@ -4,6 +4,8 @@ from pptx import Presentation
 from templates.template_1 import strips_layout_one
 from templates.template_2 import strips_layout_two
 from helpers.path_helpers import get_base_path
+from templates.template_1_PT import strips_layout_one_PT
+from templates.template_2_PT import strips_layout_two_PT
 
 BASE_PATH = get_base_path()
 
@@ -82,6 +84,33 @@ def run_strips_template(template_number: int, prs: Presentation, df: pd.DataFram
                 prs, layout_index=1, buyers_chunk_df=chunk_df, start_number=start_number
             )
         print(f"✅ Finished presentation with {runs_total} slides.")
+    elif template_number == 3:
+        rows_per_slide = 6
+        runs_total = (len(df) + rows_per_slide - 1) // rows_per_slide # Add an extra to force floor division to work like ceiling division, so last partial slide is included
 
+        for run_count in range(runs_total):
+            print(f"📊 Creating slide {run_count+1} of {runs_total}...")
+            start_idx = run_count * rows_per_slide
+            chunk_df = df.iloc[start_idx : start_idx + rows_per_slide]
+            start_number = run_count * rows_per_slide + 1
+
+            strips_layout_one_PT(
+                prs, layout_index=2, buyers_chunk_df=chunk_df, start_number=start_number
+            )
+        print(f"✅ Finished presentation with {runs_total} slides.")
+    elif template_number == 4:
+        rows_per_slide = 6
+        runs_total = (len(df) + rows_per_slide - 1) // rows_per_slide # Add an extra to force floor division to work like ceiling division, so last partial slide is included
+
+        for run_count in range(runs_total):
+            print(f"📊 Creating slide {run_count+1} of {runs_total}...")
+            start_idx = run_count * rows_per_slide
+            chunk_df = df.iloc[start_idx : start_idx + rows_per_slide]
+            start_number = run_count * rows_per_slide + 1
+
+            strips_layout_two_PT(
+                prs, layout_index=2, buyers_chunk_df=chunk_df, start_number=start_number
+            )
+        print(f"✅ Finished presentation with {runs_total} slides.")
 run_strips_template(2, prs=prs, df=df)
 prs.save(os.path.join(BASE_PATH, "buyers_presentation.pptx"))

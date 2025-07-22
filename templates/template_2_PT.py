@@ -6,7 +6,7 @@ from helpers.logo_resources import get_logo_file_path
 from helpers.logo_placement import place_logo_on_slide
 from translate_helpers import translate_text
 
-def strips_layout_two(prs: Presentation, layout_index: int, buyers_chunk_df: pd.DataFrame, start_number: int):
+def strips_layout_two_PT(prs: Presentation, layout_index: int, buyers_chunk_df: pd.DataFrame, start_number: int):
     
     """
     Adds a slide to the presentation using the specified layout index,
