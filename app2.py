@@ -4,7 +4,7 @@ from pptx import Presentation
 from dispatcher import run_strips_template
 import io
 import os
-from helpers.path_helpers import get_base_path
+from path_helpers import get_base_path
 
 st.set_page_config(layout="wide", page_title="Buyers Presentation Tool")
 

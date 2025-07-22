@@ -3,7 +3,7 @@ import pandas as pd
 from pptx import Presentation
 from templates.template_1 import strips_layout_one
 from templates.template_2 import strips_layout_two
-from helpers.path_helpers import get_base_path
+from path_helpers import get_base_path
 from templates.template_1_PT import strips_layout_one_PT
 from templates.template_2_PT import strips_layout_two_PT
 
