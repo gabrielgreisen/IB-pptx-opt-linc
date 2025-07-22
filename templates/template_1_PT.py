@@ -4,12 +4,15 @@ from pptx.dml.color import RGBColor
 from helpers.copy_helpers import copy_table_from_template_slide
 from helpers.logo_resources import get_logo_file_path
 from helpers.logo_placement import place_logo_on_slide
+from translate_helpers import translate_text
 
 def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.DataFrame, start_number: int):
     
     """
     Adds a slide to the presentation using the specified layout index,
     finds the table, and fills it with buyers from the DataFrame slice.
+    Portuguese version of template_1 (layout A)
+    Language: pt
 
     Parameters
     ----------
@@ -26,7 +29,7 @@ def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
     slide_layout = prs.slide_layouts[layout_index]
     slide = prs.slides.add_slide(slide_layout)
 
-    copy_table_from_template_slide(prs, source_slide_idx=1, target_slide=slide)
+    copy_table_from_template_slide(prs, source_slide_idx=3, target_slide=slide)
 
     # Find the table shape on the slide
     table = None
@@ -45,8 +48,10 @@ def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
         # Assumes that columns follow the correct format/order of the columns according to mask; fixed column positions
         exchange = str(row.iloc[3])
         ticker = str(row.iloc[4])
-        country = str(row.iloc[5])
-        description = str(row.iloc[6])
+        country = row.iloc[5]
+        country = translate_text(str(country)) if pd.notna(country) else ""
+        description = row.iloc[6]
+        description = translate_text(str(description)) if pd.notna(description) else ""
         br_presence = str(row.iloc[7])
         acquisition_count = str(row.iloc[8])
         acquisition_names = str(row.iloc[9])
@@ -148,10 +153,10 @@ def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
         # Build fifth column (M&A History)
         cell = table.cell(row_idx, 4)
         if cell.text_frame.paragraphs and cell.text_frame.paragraphs[0].runs:
-            cell.text_frame.paragraphs[0].runs[0].text = f"Acquisitions: {acquisition_count} \n \nCompanies: {acquisition_names}"
+            cell.text_frame.paragraphs[0].runs[0].text = f"Aquisições: {acquisition_count} \n \nCompanhias: {acquisition_names}"
             cell.text_frame._element.remove(cell.text_frame.paragraphs[-1]._element)
         else:
-            cell.text = f"Acquisitions: {acquisition_count} \n \nCompanies: {acquisition_names}"
+            cell.text = f"Aquisições: {acquisition_count} \n \nCompanhias: {acquisition_names}"
             cell.text_frame._element.remove(cell.text_frame.paragraphs[-1]._element)
             
 
