@@ -65,21 +65,22 @@ if uploaded_file is not None:
                 uploaded_file,
                 sheet_name=sheet_name,
                 header=1,
-                usecols="B:Q"
+                usecols="B:R"
             ).dropna(subset=['pb_id'])
             st.success(f"✓ Loaded {len(df)} buyers from uploaded file.")
 
             prs = Presentation(os.path.join(get_base_path(), template_file))
             run_strips_template(template_number, prs=prs, df=df)
-            prs.save(output_file)
-            st.success(f"✓ Presentation saved as '{output_file}'.")
-            with open(output_file, "rb") as f:
-                st.download_button(
-                    label="Download Presentation",
-                    data=f,
-                    file_name=output_file,
-                    mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
-                )
+            pptx_io = io.BytesIO()
+            prs.save(pptx_io)
+            pptx_io.seek(0)
+            st.success("✓ Presentation generated successfully.")
+            st.download_button(
+                label="Download Presentation",
+                data=pptx_io,
+                file_name=output_file,
+                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            )
         except Exception as e:
             st.error(f"✘ Something went wrong: {e}")
 else:
