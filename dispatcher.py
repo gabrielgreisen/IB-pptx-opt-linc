@@ -13,7 +13,7 @@ df = pd.read_excel(
     os.path.join(BASE_PATH, "database_strips_v5CIQstale.xlsx"),
     sheet_name="Python Strip Mask",
     header=1,  # because the headers for the table are on row 2
-    usecols="B:Q"  # adjust based on column range of the table/info
+    usecols="B:R"  # adjust based on column range of the table/info
 )
 
 prs = Presentation(os.path.join(BASE_PATH, "templates.pptx"))

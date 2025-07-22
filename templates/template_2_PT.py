@@ -65,6 +65,7 @@ def strips_layout_two_PT(prs: Presentation, layout_index: int, buyers_chunk_df: 
         ebitda = format_number(row.iloc[13])
         market_cap = format_number(row.iloc[14])
         employees = format_number(row.iloc[15])
+        total_debt = format_number(row.iloc[16])
 
         # Build first column (numbering)
         number = start_number + i
@@ -125,14 +126,14 @@ def strips_layout_two_PT(prs: Presentation, layout_index: int, buyers_chunk_df: 
         found_index = None
         for idx, para in enumerate(cell.text_frame.paragraphs):
             if para.runs:
-                para.runs[0].text = f"Receita: {revenue}\nEBITDA: {ebitda}\nMarket Cap: {market_cap}\nDívida Total: XXX\nFuncionários: {employees}" # Assumes same formating for the whole text
+                para.runs[0].text = f"Receita: {revenue}\nEBITDA: {ebitda}\nMarket Cap: {market_cap}\nDívida Total: {total_debt}\nFuncionários: {employees}" # Assumes same formating for the whole text
                 found_index = idx
                 break
         else:
             # if none of the paragraphs had a run text is added with default formating
             para = cell.text_frame.add_paragraph()
             run = para.add_run()
-            run.text = f"Receita: {revenue}\nEBITDA: {ebitda}\nMarket Cap: {market_cap}\nDívida Total:XXX\nFuncionários: {employees}"
+            run.text = f"Receita: {revenue}\nEBITDA: {ebitda}\nMarket Cap: {market_cap}\nDívida Total: {total_debt}\nFuncionários: {employees}"
             found_index = len(cell.text_frame.paragraphs) - 1
 
         for idx, extra_para in reversed(list(enumerate(cell.text_frame.paragraphs))):
