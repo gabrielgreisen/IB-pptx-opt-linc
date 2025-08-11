@@ -10,10 +10,10 @@ from templates.template_2_PT import strips_layout_two_PT
 BASE_PATH = get_base_path()
 
 df = pd.read_excel(
-    os.path.join(BASE_PATH, "database_strips_v5CIQstale.xlsx"),
+    os.path.join(BASE_PATH, "database_strips_v14stale.xlsx"),
     sheet_name="Python Strip Mask",
     header=1,  # because the headers for the table are on row 2
-    usecols="B:R"  # adjust based on column range of the table/info
+    usecols="B:S"  # adjust based on column range of the table/info
 )
 
 prs = Presentation(os.path.join(BASE_PATH, "templates.pptx"))
@@ -112,5 +112,5 @@ def run_strips_template(template_number: int, prs: Presentation, df: pd.DataFram
                 prs, layout_index=2, buyers_chunk_df=chunk_df, start_number=start_number
             )
         print(f"✅ Finished presentation with {runs_total} slides.")
-run_strips_template(2, prs=prs, df=df)
+run_strips_template(1, prs=prs, df=df)
 prs.save(os.path.join(BASE_PATH, "buyers_presentation.pptx"))

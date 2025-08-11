@@ -2,7 +2,7 @@ from pptx import Presentation
 import pandas as pd
 from pptx.dml.color import RGBColor
 from helpers.copy_helpers import copy_table_from_template_slide
-from helpers.logo_resources import get_logo_file_path
+from helpers.logo_resources import get_logo_file_path, get_lincoln_file_path
 from helpers.logo_placement import place_logo_on_slide
 from translate_helpers import translate_text
 
@@ -53,19 +53,20 @@ def strips_layout_two_PT(prs: Presentation, layout_index: int, buyers_chunk_df: 
         description = row.iloc[6]
         description = translate_text(str(description)) if pd.notna(description) else ""
         br_presence = str(row.iloc[7])
-        acquisition_count = str(row.iloc[8])
-        acquisition_names = str(row.iloc[9])
+        linc_advised = str(row.iloc[8])
+        acquisition_count = str(row.iloc[9])
+        acquisition_names = str(row.iloc[10])
         def format_number(val):
             try:
                 return f"{float(val):,.2f}" # comma as thousand separator + 2 decimals
             except:
                 return str(val)
 
-        revenue = format_number(row.iloc[12])
-        ebitda = format_number(row.iloc[13])
-        market_cap = format_number(row.iloc[14])
-        employees = format_number(row.iloc[15])
-        total_debt = format_number(row.iloc[16])
+        revenue = format_number(row.iloc[13])
+        ebitda = format_number(row.iloc[14])
+        market_cap = format_number(row.iloc[15])
+        employees = format_number(row.iloc[16])
+        total_debt = format_number(row.iloc[17])
 
         # Build first column (numbering)
         number = start_number + i
@@ -198,5 +199,12 @@ def strips_layout_two_PT(prs: Presentation, layout_index: int, buyers_chunk_df: 
         if logo_file:
             place_logo_on_slide(slide, table_shape, table, row_idx, 1, logo_file,
                                 width_spacing=0.95, height_spacing=0.50, left_spacing=0.03, top_spacing=0.18)
+            
+        # Add favicon to company advised in second column
+        if linc_advised == "Yes":
+            logo_file = get_lincoln_file_path("linc_favi")
+            if logo_file:
+                place_logo_on_slide(slide, table_shape, table, row_idx, 1, logo_file,
+                                    width_spacing=0.2, height_spacing=0.3, left_spacing=0.90, top_spacing=0.1)
 
 

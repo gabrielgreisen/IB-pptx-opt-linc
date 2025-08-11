@@ -2,7 +2,7 @@ from pptx import Presentation
 import pandas as pd
 from pptx.dml.color import RGBColor
 from helpers.copy_helpers import copy_table_from_template_slide
-from helpers.logo_resources import get_logo_file_path
+from helpers.logo_resources import get_logo_file_path, get_lincoln_file_path
 from helpers.logo_placement import place_logo_on_slide
 
 def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.DataFrame, start_number: int):
@@ -48,8 +48,9 @@ def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
         country = str(row.iloc[5])
         description = str(row.iloc[6])
         br_presence = str(row.iloc[7])
-        acquisition_count = str(row.iloc[8])
-        acquisition_names = str(row.iloc[9])
+        linc_advised = str(row.iloc[8])
+        acquisition_count = str(row.iloc[9])
+        acquisition_names = str(row.iloc[10])
 
         # Build first column (numbering)
         number = start_number + i
@@ -160,3 +161,10 @@ def strips_layout_one(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
         if logo_file:
             place_logo_on_slide(slide, table_shape, table, row_idx, 1, logo_file,
                                 width_spacing=0.85,height_spacing=0.55,left_spacing=0.05,top_spacing=0.17)
+            
+        # Add favicon to company advised in second column
+        if linc_advised == "Yes":
+            logo_file = get_lincoln_file_path("linc_favi")
+            if logo_file:
+                place_logo_on_slide(slide, table_shape, table, row_idx, 1, logo_file,
+                                    width_spacing=0.2, height_spacing=0.3, left_spacing=0.90, top_spacing=0.1)
