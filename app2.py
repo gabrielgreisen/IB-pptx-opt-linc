@@ -18,9 +18,9 @@ st.markdown("<hr style='border:1px solid #eee'>", unsafe_allow_html=True)
 st.markdown("<h4 style='font-family:Arial; color:#003366;'>Instructions</h4>", unsafe_allow_html=True)
 st.markdown("""
 <ul style='color:#003366; font-family:Arial;'>
-    <li>- Upload your Excel file containing the buyers data.</li>
-    <li>- Adjust the sheet and template settings if needed.</li>
-    <li>- Click <b>Run Presentation</b> to generate your PowerPoint deck.</li>
+    <li> Upload your Excel file containing the buyers data.</li>
+    <li> Adjust the sheet and template settings if needed.</li>
+    <li> Click <b>Run Presentation</b> to generate your PowerPoint deck.</li>
 </ul>
 """, unsafe_allow_html=True)
 
@@ -35,7 +35,7 @@ st.caption("Please ensure your Excel file maintains the 'Python Strip Mask' stru
 sheet_name = st.text_input("Sheet name", value="Python Strip Mask")
 template_file = st.selectbox(
     "Select PPT template file",
-    options=["templates.pptx", "template_wide.pptx"],
+    options=["templates.pptx", "templates_wide.pptx"],
     index=0  # defaults to first
 )
 output_file = st.text_input("Output PPT file name", value="buyers_presentation.pptx")
@@ -65,7 +65,7 @@ if uploaded_file is not None:
                 uploaded_file,
                 sheet_name=sheet_name,
                 header=1,
-                usecols="B:R"
+                usecols="B:S"
             ).dropna(subset=['pb_id'])
             st.success(f"✓ Loaded {len(df)} buyers from uploaded file.")
 
