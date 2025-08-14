@@ -38,7 +38,7 @@ check_auth()
 
 # === Header with Lincoln logo
 st.image(os.path.join(get_base_path(), "logos", "lincolninternational.png"), width=200)
-st.markdown("<h2 style='font-family:Arial; color:#003366;'>Buyers Presentation Tool</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='font-family:Arial; color:#003366;'>Strategic Buyers Presentation Tool</h2>", unsafe_allow_html=True)
 
 st.markdown("<hr style='border:1px solid #eee'>", unsafe_allow_html=True)
 
