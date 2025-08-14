@@ -6,7 +6,7 @@ from helpers.logo_resources import get_logo_file_path, get_lincoln_file_path
 from helpers.logo_placement import place_logo_on_slide
 from translate_helpers import translate_text
 
-def strips_layout_one_PT(prs: Presentation, layout_index: int, buyers_chunk_df: pd.DataFrame, start_number: int):
+def strips_layout_one_PT(prs: Presentation, layout_index: int, buyers_chunk_df: pd.DataFrame, start_number: int, brand_api_key):
     
     """
     Adds a slide to the presentation using the specified layout index,
@@ -162,14 +162,14 @@ def strips_layout_one_PT(prs: Presentation, layout_index: int, buyers_chunk_df: 
             
 
         # Add logos to the second column
-        logo_file = get_logo_file_path(row)
+        logo_file = get_logo_file_path(row, brand_api_key=brand_api_key)
         if logo_file:
             place_logo_on_slide(slide, table_shape, table, row_idx, 1, logo_file,
                                 width_spacing=0.85,height_spacing=0.55,left_spacing=0.05,top_spacing=0.17)
             
         # Add favicon to company advised in second column
         if linc_advised == "Yes":
-            logo_file = get_lincoln_file_path("linc_favi")
+            logo_file = get_lincoln_file_path("linc_favi", brand_api_key=brand_api_key)
             if logo_file:
                 place_logo_on_slide(slide, table_shape, table, row_idx, 1, logo_file,
                                     width_spacing=0.2, height_spacing=0.3, left_spacing=0.90, top_spacing=0.1)

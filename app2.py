@@ -6,7 +6,35 @@ import io
 import os
 from path_helpers import get_base_path
 
-st.set_page_config(layout="wide", page_title="Buyers Presentation Tool")
+# --- Soft password wall ---
+def check_auth():
+    if "authed" not in st.session_state:
+        st.session_state.authed = False
+
+    if st.session_state.authed:
+        return
+
+    st.title("Financial Buyers Presentation Tool")
+    st.caption("Access required")
+
+    pw = st.text_input("Password", type="password")
+    ok = st.button("Unlock")
+
+    expected = st.secrets.get("APP_PASSWORD", os.environ.get("APP_PASSWORD", ""))
+
+    if ok:
+        if pw and expected and pw == expected:
+            st.session_state.authed = True
+            st.rerun()
+        else:
+            st.error("Incorrect password")
+            st.stop()
+
+    st.stop()
+
+
+st.set_page_config(layout="wide", page_title="Financial Buyers Presentation Tool")
+check_auth()
 
 # === Header with Lincoln logo
 st.image(os.path.join(get_base_path(), "logos", "lincolninternational.png"), width=200)
@@ -28,6 +56,20 @@ st.markdown("<hr style='border:1px solid #eee'>", unsafe_allow_html=True)
 
 # === Settings
 st.markdown("<h4 style='font-family:Arial; color:#003366;'>📂 Excel & PowerPoint Settings</h4>", unsafe_allow_html=True)
+
+# === API key selection ===
+api_choice = st.selectbox(
+    "Choose Brandfetch API key",
+    options=["Key 1", "Key 2", "Key 3"],
+    index=0
+)
+
+key_map = {
+    "Key 1": st.secrets["BRANDFETCH_API_KEY1"],
+    "Key 2": st.secrets["BRANDFETCH_API_KEY2"],
+    "Key 3": st.secrets["BRANDFETCH_API_KEY3"]
+}
+brand_api_key = key_map[api_choice]
 
 # Upload file
 uploaded_file = st.file_uploader("Upload your Excel file", type=["xlsx"])
@@ -70,7 +112,7 @@ if uploaded_file is not None:
             st.success(f"✓ Loaded {len(df)} buyers from uploaded file.")
 
             prs = Presentation(os.path.join(get_base_path(), template_file))
-            run_strips_template(template_number, prs=prs, df=df)
+            run_strips_template(template_number, prs=prs, df=df, brand_api_key=brand_api_key)
             pptx_io = io.BytesIO()
             prs.save(pptx_io)
             pptx_io.seek(0)
