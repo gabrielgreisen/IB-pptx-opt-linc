@@ -14,7 +14,7 @@ def check_auth():
     if st.session_state.authed:
         return
 
-    st.title("Financial Buyers Presentation Tool")
+    st.title("Strategic Buyers Presentation Tool")
     st.caption("Access required")
 
     pw = st.text_input("Password", type="password")
