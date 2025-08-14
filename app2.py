@@ -107,8 +107,8 @@ if uploaded_file is not None:
                 uploaded_file,
                 sheet_name=sheet_name,
                 header=1,
-                usecols="B:S"
-            ).dropna(subset=['pb_id'])
+                usecols="B:B, E:S"
+            ).dropna(subset=['potential_buyer']).drop(columns=['potential_buyer'])
             st.success(f"✓ Loaded {len(df)} buyers from uploaded file.")
 
             prs = Presentation(os.path.join(get_base_path(), template_file))

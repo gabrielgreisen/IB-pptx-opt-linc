@@ -43,25 +43,26 @@ def strips_layout_two(prs: Presentation, layout_index: int, buyers_chunk_df: pd.
     for i, (_, row) in enumerate(buyers_chunk_df.iterrows()):
         row_idx = i + 1
         # Assumes that columns follow the correct format/order of the columns according to mask; fixed column positions
-        exchange = str(row.iloc[3])
-        ticker = str(row.iloc[4])
-        country = str(row.iloc[5])
-        description = str(row.iloc[6])
-        br_presence = str(row.iloc[7])
-        linc_advised = str(row.iloc[8])
-        acquisition_count = str(row.iloc[9])
-        acquisition_names = str(row.iloc[10])
+        exchange = str(row["exchange"])
+        ticker = str(row["ticker"])
+        country = str(row["country"])
+        description = str(row["description"])
+        br_presence = str(row["brazil_presence"])
+        linc_advised = str(row["linc_advised"])
+        acquisition_count = str(row["acquisition_count"])
+        acquisition_names = str(row["acquired_companies"])
+
         def format_number(val):
             try:
                 return f"{float(val):,.2f}" # comma as thousand separator + 2 decimals
             except:
                 return str(val)
 
-        revenue = format_number(row.iloc[13])
-        ebitda = format_number(row.iloc[14])
-        market_cap = format_number(row.iloc[15])
-        employees = format_number(row.iloc[16])
-        total_debt = format_number(row.iloc[17])
+        revenue = format_number(row["revenue_TTM_MM"])
+        ebitda = format_number(row["EBITDA_MM"])
+        market_cap = format_number(row["market_cap_MM"])
+        employees = format_number(row["employees"])
+        total_debt = format_number(row["total_debt_MM"])
 
         # Build first column (numbering)
         number = start_number + i
