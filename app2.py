@@ -33,7 +33,7 @@ def check_auth():
     st.stop()
 
 
-st.set_page_config(layout="wide", page_title="Financial Buyers Presentation Tool")
+st.set_page_config(layout="wide", page_title="Strategic Buyers Presentation Tool")
 check_auth()
 
 # === Header with Lincoln logo
