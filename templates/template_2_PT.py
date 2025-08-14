@@ -65,11 +65,11 @@ def strips_layout_two_PT(prs: Presentation, layout_index: int, buyers_chunk_df: 
             except:
                 return str(val)
 
-        revenue = format_number(row.iloc[13])
-        ebitda = format_number(row.iloc[14])
-        market_cap = format_number(row.iloc[15])
-        employees = format_number(row.iloc[16])
-        total_debt = format_number(row.iloc[17])
+        revenue = format_number(row["revenue_TTM_MM"])
+        ebitda = format_number(row["EBITDA_MM"])
+        market_cap = format_number(row["market_cap_MM"])
+        employees = format_number(row["employees"])
+        total_debt = format_number(row["total_debt_MM"])
 
         # Build first column (numbering)
         number = start_number + i
