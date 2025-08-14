@@ -62,8 +62,8 @@ def get_logo_file_path(row, brand_api_key, logo_base_dir="logos"):
         Full path to the logo PNG file, or None if unavailable.
     """
 
-    logo_name = str(row.iloc[12]) # your 10th column for cleaned logo name
-    domain = str(row.iloc[11]) # your 9th column for website domain
+    logo_name = str(row["logo_file"]) # your 10th column for cleaned logo name
+    domain = str(row["website"]) # your 9th column for website domain
 
     return ensure_logo_available(logo_name, domain, brand_api_key=brand_api_key, logo_base_dir=logo_base_dir)
 
